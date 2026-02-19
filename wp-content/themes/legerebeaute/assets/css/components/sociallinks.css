@@ -1,0 +1,26 @@
+.social-links {
+   margin-bottom: 2rem;
+   padding: 1.5rem;
+   background-color: var(--color-primary);
+   border-radius: 8px;
+}
+
+.social-links__title {
+   font-size: 1.4rem;
+   margin-top: 0;
+   margin-bottom: 1rem;
+}
+
+.social-links__items {
+   list-style-type: none;
+   padding-left: 0;
+}
+
+.social-single__item {
+   margin-bottom: 0.75rem;
+   position: relative;
+}
+
+.social-single__link {
+   font-weight: bold;
+}

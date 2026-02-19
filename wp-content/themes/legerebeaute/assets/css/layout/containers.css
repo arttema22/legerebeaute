@@ -1,0 +1,10 @@
+main {
+   margin-top: var(--header-height);
+   padding: 0 10px;
+}
+
+@media (min-width: 768px) {
+   main {
+      padding: 0 40px;
+   }
+}

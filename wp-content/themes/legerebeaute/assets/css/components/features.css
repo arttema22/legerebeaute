@@ -1,0 +1,64 @@
+.features {
+   margin-bottom: 20px;
+   text-align: center;
+}
+
+.features__slide-inner {
+   display: grid;
+   grid-template-columns: 1fr;
+   grid-template-rows: auto auto;
+   grid-column-gap: 10px;
+   grid-row-gap: 10px;
+   width: 100%;
+}
+
+.features__item--slide {
+   padding: 1rem;
+   background-color: var(--color-primary);
+}
+
+.features__item--slide .round-card__content {
+   justify-content: space-between;
+}
+
+.features-title {
+   font-family: "Muller";
+   font-size: 35px;
+   text-transform: none;
+   color: white;
+}
+
+.features-short-description {
+   color: white;
+}
+
+@media (min-width: 768px) {
+   .features {
+      margin-bottom: 60px;
+   }
+
+   /* Если в слайде только 1 элемент */
+   .features__slide-inner:has(> .features__item--slide:nth-child(1)):not(:has(> .features__item--slide:nth-child(2))) {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+   }
+
+   .features__slide-inner {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: 1fr;
+   }
+
+   .features__slide-inner > .features__item--slide:nth-child(1) {
+      grid-area: 1/1/3/2;
+   }
+
+   .features__slide-inner > .features__item--slide:nth-child(2) {
+      grid-area: 1/2/2/3;
+      height: 200px;
+   }
+
+   .features__slide-inner > .features__item--slide:nth-child(3) {
+      grid-area: 2/2/3/3;
+      height: 200px;
+   }
+}

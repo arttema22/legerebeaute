@@ -1,0 +1,26 @@
+section {
+   margin-bottom: 10%;
+}
+
+.container {
+   position: relative;
+   max-width: 1360px;
+   /* width: min(100% - 1rem, 1360px); */
+   margin-inline: auto;
+   /* padding: 0 10px; */
+}
+
+@media (min-width: 640px) {
+}
+
+@media (min-width: 768px) {
+   .container {
+      padding: 0 40px;
+   }
+}
+
+@media (min-width: 1024px) {
+}
+
+@media (min-width: 1280px) {
+}

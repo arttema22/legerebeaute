@@ -1,0 +1,50 @@
+:root {
+   --font-family-base: "Muller";
+   --font-size-base: 16px;
+   --line-height-base: 1.2;
+
+   /* Цвета */
+   --color-bg: #ffffff;
+   --color-link: #1d1d1b;
+   /* --color-secondary: #0f253d; */
+   --color-secondary-h: 210;
+   --color-secondary-s: 64%;
+   --color-secondary-l: 14%;
+   --color-secondary: hsl(var(--color-secondary-h), var(--color-secondary-s), var(--color-secondary-l));
+   --color-secondary-hover: hsl(
+      var(--color-secondary-h),
+      var(--color-secondary-s),
+      calc(var(--color-secondary-l) + 5%)
+   );
+   --color-text: #1d1d1b;
+   --color-primary: #d4a869;
+   --color-primary-light: #f1e2cd;
+   --color-text-light: #e1e1e0;
+
+   --gap: 5px;
+   --max-width: 100%;
+
+   /* Размеры иконок (мобильные — базовые) */
+   --social-icon-size: 18px;
+   /* --social-icon-padding: 7px; */
+   --social-item-size: calc(var(--social-icon-size) + 14px);
+   /* --social-item-size: 20px; */
+
+   --header-height: 40px;
+   --border-color: #eaeaea;
+   --border-radius: 18px;
+}
+
+/* Планшеты и десктопы (от 768px) */
+@media (min-width: 768px) {
+   :root {
+      --gap: 20px;
+      --max-width: 1360px;
+
+      --social-icon-size: 24px;
+      --social-item-size: calc(var(--social-icon-size) + 18px);
+      /* --social-icon-padding: 10px; */
+      --border-radius: 35px;
+      --header-height: 80px;
+   }
+}

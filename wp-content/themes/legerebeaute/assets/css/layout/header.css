@@ -1,0 +1,61 @@
+.site-header {
+   position: sticky;
+   top: 0;
+   z-index: 1000;
+   background-color: white;
+   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+   /* height: var(--header-height); */
+}
+
+.header-content {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 0.5rem 0;
+   gap: var(--gap);
+}
+
+.custom-logo-link {
+   width: 200px;
+}
+
+/* Логотип */
+.logo img {
+   max-height: 40px;
+   width: auto;
+}
+
+.header-right {
+   display: none;
+   align-items: center;
+   gap: var(--gap);
+}
+
+.header-contacts {
+   display: flex;
+   flex-direction: column;
+   min-width: 142px;
+}
+
+.header-contacts__item {
+   color: var(--color-secondary);
+}
+
+.header-contacts__link {
+   color: var(--color-secondary);
+}
+
+@media (min-width: 640px) {
+}
+
+@media (min-width: 768px) {
+}
+
+@media (min-width: 1024px) {
+   .header-right {
+      display: flex;
+   }
+}
+
+@media (min-width: 1280px) {
+}

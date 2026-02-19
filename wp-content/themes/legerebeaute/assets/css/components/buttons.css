@@ -1,0 +1,50 @@
+.btn {
+   cursor: pointer;
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   border-radius: 50px;
+   transition: all 0.2s ease;
+   width: fit-content;
+   gap: 0.5rem;
+   background-color: white;
+   margin-top: auto;
+}
+
+.btn-more {
+   padding: 0.5rem 1rem;
+}
+
+.btn-more:hover {
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+   transform: translateY(-2px);
+}
+
+.btn-booking-modal {
+   padding: 5px 15px;
+   align-self: center;
+}
+
+.btn-icon {
+   display: inline-block;
+   width: 1em;
+   height: 1em;
+   background-color: var(--color-primary);
+   border-radius: 50%;
+   flex-shrink: 0;
+}
+
+.wpcf7-submit {
+   width: 100%;
+   background-color: var(--color-primary);
+   color: white;
+   border: none;
+   padding: 1rem 2rem;
+}
+
+@media (min-width: 768px) {
+   .btn-booking-modal {
+      padding: 1rem 2rem;
+      align-self: normal;
+   }
+}

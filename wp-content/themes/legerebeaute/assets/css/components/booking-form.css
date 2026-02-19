@@ -1,0 +1,217 @@
+.wpcf7-form {
+   display: flex;
+   flex-direction: column;
+   gap: var(--gap);
+}
+
+/* Поля ввода */
+.wpcf7-form .form-control {
+   width: 100%;
+   padding: 0.75rem 1rem;
+   font-size: 1rem;
+   font-family: inherit;
+   background-color: #fff;
+   border: 1px solid #e0e0e0;
+   border-radius: 4px;
+   transition:
+      border-color 0.3s ease,
+      box-shadow 0.3s ease;
+   box-sizing: border-box;
+}
+
+.wpcf7-form .form-control:focus {
+   outline: none;
+   border-color: var(--color-primary);
+}
+
+/* Стили для поля даты */
+.wpcf7-form input[type="date"] {
+   cursor: pointer;
+}
+
+.wpcf7-form input[type="date"]::-webkit-calendar-picker-indicator {
+   cursor: pointer;
+   filter: invert(0.5);
+}
+
+.service-date {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 1rem;
+}
+
+.wpcf7-form .btn:disabled {
+   background-color: #ccc;
+   cursor: not-allowed;
+   transform: none;
+}
+
+/* Чекбокс согласия */
+.wpcf7-form [acceptance] {
+   display: flex;
+   align-items: flex-start;
+   gap: 0.5rem;
+   margin: 0;
+   padding: 0;
+   font-size: 0.875rem;
+   color: #666;
+   line-height: 1.5;
+}
+
+.wpcf7-form [acceptance] input[type="checkbox"] {
+   margin-top: 0.25rem;
+   width: 18px;
+   height: 18px;
+   cursor: pointer;
+}
+
+.wpcf7-form [acceptance] label {
+   display: inline;
+   margin: 0;
+   padding: 0;
+   cursor: pointer;
+}
+
+.wpcf7-form [acceptance] a {
+   color: var(--color-primary);
+   text-decoration: underline;
+   transition: color 0.3s ease;
+}
+
+.wpcf7-form [acceptance] a:hover {
+   color: var(--color-primary);
+}
+
+/* Сообщения об ошибках */
+
+/* Скрыть стандартные сообщения CF7 */
+.wpcf7-response-output {
+   display: none !important;
+}
+
+.wpcf7-response-output {
+   margin: 0;
+   padding: 1rem;
+   border-radius: 4px;
+   font-size: 0.875rem;
+   line-height: 1.5;
+}
+
+.wpcf7-response-output.wpcf7-validation-errors {
+   background-color: #fff3cd;
+   border: 1px solid #ffc107;
+   color: #856404;
+}
+
+.wpcf7-response-output.wpcf7-mail-sent-ok {
+   background-color: #d4edda;
+   border: 1px solid #c3e6cb;
+   color: #155724;
+}
+
+.wpcf7-response-output.wpcf7-mail-sent-ng {
+   background-color: #f8d7da;
+   border: 1px solid #f5c6cb;
+   color: #721c24;
+}
+
+/* Подсказки валидации */
+.wpcf7-not-valid-tip {
+   margin-top: 0.25rem;
+   font-size: 0.75rem;
+   color: #dc3545;
+   display: block;
+}
+
+/* Поля с ошибками */
+.wpcf7-not-valid {
+   border-color: #dc3545 !important;
+}
+
+/* Спиннер загрузки */
+.wpcf7-spinner {
+   display: inline-block;
+   width: 20px;
+   height: 20px;
+   border: 3px solid var(--color-secondary);
+   border-top-color: var(--color-secondary-hover);
+   border-radius: 50%;
+   animation: spin 0.8s linear infinite;
+   margin-left: 0.5rem;
+   vertical-align: middle;
+}
+
+@keyframes spin {
+   to {
+      transform: rotate(360deg);
+   }
+}
+
+@media (max-width: 768px) {
+   /* Блок выбора даты и времени - вертикально на мобильных */
+   .service-date {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+   }
+
+   /* Дропдаун времени */
+   .dropdown__content {
+      max-height: 250px;
+   }
+
+   /* Кнопка */
+   .wpcf7-form .btn {
+      padding: 0.875rem 1.5rem;
+      font-size: 0.9375rem;
+   }
+}
+
+@media (max-width: 480px) {
+   /* Поля ввода */
+   .wpcf7-form .form-control {
+      padding: 0.625rem 0.75rem;
+      font-size: 0.9375rem;
+   }
+
+   /* Кнопка */
+   .wpcf7-form .btn {
+      padding: 0.75rem 1.25rem;
+      font-size: 0.875rem;
+   }
+}
+
+/* ========================================
+   Дополнительные улучшения
+   ======================================== */
+
+/* Стили для поля телефона с маской */
+.wpcf7-form input[type="tel"] {
+   font-family: "Courier New", monospace;
+}
+
+/* Плавные переходы для всех элементов */
+.wpcf7-form * {
+   transition: all 0.2s ease;
+}
+
+/* Фокус для всех интерактивных элементов */
+.wpcf7-form input:focus,
+.wpcf7-form select:focus,
+.wpcf7-form textarea:focus {
+   outline: none;
+   border-color: var(--color-primary);
+}
+
+/* Стили для плейсхолдера */
+.wpcf7-form .form-control::placeholder {
+   color: #aaa;
+   opacity: 1;
+}
+
+.wpcf7-form .form-control:-ms-input-placeholder {
+   color: #aaa;
+}
+
+.wpcf7-form .form-control::-ms-input-placeholder {
+   color: #aaa;
+}

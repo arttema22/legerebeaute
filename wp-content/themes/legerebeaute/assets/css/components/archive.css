@@ -1,0 +1,281 @@
+.page-header {
+   text-align: center;
+}
+
+.service-single__price {
+   max-width: 80%;
+   background-color: var(--color-primary-light);
+   border-radius: var(--border-radius);
+   margin: auto;
+   padding: 2rem 4rem;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+}
+
+.service-single__description {
+   margin-bottom: 2rem;
+   line-height: 1.7;
+}
+
+.service-single__benefits {
+   margin-bottom: 2rem;
+   padding: 1.5rem;
+   background-color: #f9f9f9; /* Светлый фон для секции */
+   border-radius: 8px;
+}
+
+.service-single__benefits-title {
+   font-size: 1.4rem;
+   margin-top: 0;
+   margin-bottom: 1rem;
+   /* color: var(--color-primary, inherit); */
+}
+
+.service-single__benefits-list {
+   list-style-type: none;
+   padding-left: 0;
+}
+
+.service-single__benefit-item {
+}
+
+.service-single__benefit-title {
+   font-weight: bold;
+   /* color: var(--color-primary, inherit); */
+}
+
+.service-single__benefit-text {
+   /* Можно добавить цвет или стиль */
+}
+
+/* --- Стили для архива услуг (archive-services.php) --- */
+
+/* Стили для фильтра */
+.services-filter {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 1rem;
+   margin-bottom: 2rem;
+   justify-content: center;
+}
+
+.filter-btn {
+   padding: 0.5rem 1rem;
+   border: 2px solid #ccc;
+   background-color: white;
+   cursor: pointer;
+   border-radius: 30px;
+   transition: all 0.2s ease;
+   font-size: 0.9em;
+}
+
+.filter-btn:hover {
+   border-color: var(--color-accent, #d4a869); /* Используем переменную, если определена */
+   background-color: #f9f9f9;
+}
+
+.filter-btn.active {
+   border-color: var(--color-accent, #d4a869);
+   background-color: var(--color-accent, #d4a869);
+   color: white;
+}
+
+.no-services-message {
+   grid-column: 1 / -1; /* Растягиваем сообщение на всю ширину сетки */
+   text-align: center;
+   font-style: italic;
+   color: #999;
+}
+
+/* --- Конец стилей для архива --- */
+
+/* --- Стили для страницы отдельной услуги (single service) --- */
+
+.service-single {
+   max-width: 1200px;
+   margin: 0 auto;
+   padding: 2rem 1rem;
+}
+
+.service-single__header {
+   margin-bottom: 2rem;
+   display: flex;
+   flex-direction: column;
+   gap: 1rem;
+}
+
+@media (min-width: 768px) {
+   .service-single__header {
+      flex-direction: row;
+      gap: 2rem;
+   }
+}
+
+.service-single__image-container {
+   flex-shrink: 0;
+   width: 100%;
+   max-width: 500px;
+   margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+   .service-single__image-container {
+      margin: 0;
+   }
+}
+
+.service-single__image {
+   width: 100%;
+   height: auto;
+   border-radius: 8px;
+   display: block;
+}
+
+.service-single__info {
+   flex-grow: 1;
+}
+
+.service-single__title {
+   font-size: clamp(1.8rem, 4vw, 2.5rem);
+   margin: 0 0 1rem 0;
+   color: var(--color-primary, inherit);
+}
+
+.service-single__meta {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 1rem;
+   align-items: center;
+   margin-bottom: 1rem;
+}
+
+.service-single__duration {
+   font-weight: bold;
+   background-color: #f0f0f0;
+   padding: 0.25rem 0.5rem;
+   border-radius: 4px;
+}
+
+.service-single__prices {
+   display: flex;
+   align-items: baseline;
+   gap: 0.5rem;
+}
+
+.price-old {
+   text-decoration: line-through;
+   color: #999;
+   font-size: 0.9em;
+}
+
+.price-current {
+   font-weight: bold;
+   font-size: 1.2em;
+   color: var(--color-accent, #d4a869);
+}
+
+.service-single__intro {
+   margin-bottom: 1.5rem;
+   font-size: 1.1em;
+   line-height: 1.6;
+}
+
+.service-single__description {
+   margin-bottom: 2rem;
+   line-height: 1.7;
+}
+
+.service-single__benefits {
+   margin-bottom: 2rem;
+   padding: 1.5rem;
+   background-color: #f9f9f9;
+   border-radius: 8px;
+}
+
+.service-single__benefits-title {
+   font-size: 1.4rem;
+   margin-top: 0;
+   margin-bottom: 1rem;
+   color: var(--color-primary, inherit);
+}
+
+.service-single__benefits-list {
+   list-style-type: none;
+   padding-left: 0;
+}
+
+.service-single__benefit-item {
+   margin-bottom: 0.75rem;
+   padding-left: 1.5rem;
+   position: relative;
+}
+
+.service-single__benefit-item::before {
+   content: "•";
+   position: absolute;
+   left: 0;
+   color: var(--color-accent, #d4a869);
+   font-size: 1.2em;
+}
+
+.service-single__benefit-title {
+   font-weight: bold;
+   color: var(--color-primary, inherit);
+}
+
+.service-single__benefit-text {
+}
+
+.service-single__booking {
+   margin-bottom: 2rem;
+   padding: 1.5rem;
+   background-color: #e8f4f8;
+   border-radius: 8px;
+   border: 1px solid #d0eae2;
+}
+
+.service-single__booking-title {
+   font-size: 1.4rem;
+   margin-top: 0;
+   margin-bottom: 1rem;
+   color: var(--color-primary, inherit);
+}
+
+.service-single__booking-btn {
+   margin-bottom: 1rem;
+   display: inline-block;
+}
+
+.service-single__timeslots-title {
+   font-size: 1.1rem;
+   margin-top: 0;
+   margin-bottom: 0.5rem;
+}
+
+.service-single__timeslots-list {
+   list-style-type: none;
+   padding-left: 0;
+   display: flex;
+   flex-wrap: wrap;
+   gap: 0.5rem;
+}
+
+.service-single__timeslot-item {
+   background-color: #fff;
+   padding: 0.25rem 0.75rem;
+   border-radius: 20px;
+   border: 1px solid #ccc;
+   font-size: 0.9em;
+}
+
+.service-single__footer {
+   padding-top: 1rem;
+   border-top: 1px solid #eee;
+}
+
+.service-single__footer-btn {
+   display: inline-block;
+}
+
+/* --- Конец стилей для single service --- */

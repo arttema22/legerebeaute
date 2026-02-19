@@ -1,0 +1,86 @@
+.section-header {
+   font-size: clamp(2rem, calc(1rem + 3.5vw), 74px);
+   text-align: center;
+}
+
+.cards-grid,
+.detox-grid {
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+   gap: var(--gap);
+}
+
+.detox-grid {
+   grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+}
+
+.round-card,
+.detox-card {
+   background-color: var(--color-primary);
+   position: relative;
+   border-radius: var(--border-radius);
+   overflow: hidden;
+   min-height: 240px;
+   display: flex;
+   align-items: flex-end;
+}
+
+.round-card__image,
+.detox-card__image {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+}
+
+.round-card__img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   display: block;
+}
+
+.round-card__content,
+.detox-card__content {
+   position: relative;
+   padding: 1.5rem;
+   border-radius: 35px;
+   height: 100%;
+   width: 100%;
+   max-width: 100%;
+   display: flex;
+   flex-direction: column;
+   color: white;
+}
+
+.detox-card__content p {
+   margin-bottom: var(--gap);
+   padding: 0;
+}
+
+.entry-title {
+   font-size: clamp(1.6rem, 3vw, 2rem);
+}
+
+.entry-title a {
+   color: white;
+}
+
+.pagination-dots {
+   display: flex;
+   gap: var(--gap);
+   margin-bottom: var(--gap);
+}
+
+.pagination-dot {
+   display: inline-block;
+   width: 10px;
+   height: 10px;
+   border-radius: 50%;
+   background-color: #fefefe80;
+}
+
+.pagination-dot.active {
+   background-color: white;
+}
