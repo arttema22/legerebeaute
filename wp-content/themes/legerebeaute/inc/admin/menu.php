@@ -59,5 +59,25 @@ function legerebeaute_register_admin_menu()
       'legerebeaute_render_about_settings_page'
    );
 
+   // Подменю: Наши ценности
+   add_submenu_page(
+      'legerebeaute-settings',
+      'Наши ценности',
+      'Наши ценности',
+      'manage_options',
+      'legerebeaute-values',
+      'legerebeaute_values_settings_page'
+   );
+
+   // Подменю: Интерьер студии
+   add_submenu_page(
+      'legerebeaute-settings',
+      'Интерьер студии',
+      'Интерьер студии',
+      'manage_options',
+      'legerebeaute-interior',
+      'legerebeaute_interior_settings_page'
+   );
+
 }
 add_action('admin_menu', 'legerebeaute_register_admin_menu');

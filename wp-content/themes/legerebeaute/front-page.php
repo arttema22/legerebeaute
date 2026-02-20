@@ -16,6 +16,10 @@ get_header();
 
    <?php get_template_part('template-parts/blocks/about'); ?>
 
+   <?php get_template_part('template-parts/blocks/values'); ?>
+
+   <?php get_template_part('template-parts/blocks/interior'); ?>
+
 </main>
 
 <?php

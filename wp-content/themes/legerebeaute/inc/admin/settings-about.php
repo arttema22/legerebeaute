@@ -12,19 +12,33 @@ if (!defined('ABSPATH')) {
  */
 function legerebeaute_render_about_settings_page()
 {
+   // Подключение скриптов хелпера обязательно для работы полей на странице настроек
+   Legerebeaute_Image_Helper::enqueue_admin_scripts();
+
    if (!current_user_can('manage_options')) {
       return;
    }
+
+   // --- Определяем $defaults до условия if ---
+   $defaults = array(
+      'title' => 'О компании',
+      'text' => '',
+      'image_1' => array('id' => 0, 'url' => ''), // Теперь гарантируется массив
+      'image_2' => array('id' => 0, 'url' => ''), // Теперь гарантируется массив
+      'page_link' => '',
+      'button_text' => 'Больше о нас',
+      'form_shortcode' => ''
+   );
+   // --- Конец определения $defaults ---
 
    // Обработка сохранения
    if (isset($_POST['legerebeaute_about_settings_nonce']) && wp_verify_nonce($_POST['legerebeaute_about_settings_nonce'], 'legerebeaute_about_settings')) {
       $data = array(
          'title' => sanitize_text_field($_POST['title'] ?? ''),
          'text' => wp_kses_post($_POST['text'] ?? ''),
-         'image_1' => esc_url_raw($_POST['image_1'] ?? ''),
-         'image_1_id' => absint($_POST['image_1_id'] ?? 0),
-         'image_2' => esc_url_raw($_POST['image_2'] ?? ''),
-         'image_2_id' => absint($_POST['image_2_id'] ?? 0),
+         // Обработка изображений через хелпер
+         'image_1' => Legerebeaute_Image_Helper::process_image_field_from_post('image_1'),
+         'image_2' => Legerebeaute_Image_Helper::process_image_field_from_post('image_2'),
          'page_link' => esc_url_raw($_POST['page_link'] ?? ''),
          'button_text' => sanitize_text_field($_POST['button_text'] ?? ''),
          'form_shortcode' => sanitize_text_field($_POST['form_shortcode'] ?? '')
@@ -32,20 +46,44 @@ function legerebeaute_render_about_settings_page()
 
       update_option('legerebeaute_about_settings', $data);
       add_settings_error('legerebeaute_about_settings', 'settings_updated', 'Настройки сохранены.', 'updated');
+      
+      // Подготовим $settings для отображения с только что сохранёнными значениями
+      // Используем $data и $defaults, которые доступны в этой области
+      $settings = wp_parse_args($data, $defaults);
+   } else {
+       // Если сохранения не было, получаем данные из базы
+       $settings = get_option('legerebeaute_about_settings', array());
+       $settings = wp_parse_args($settings, $defaults); // Используем $defaults, определённый выше
+
+       // --- Добавим миграцию данных ---
+       // Проверяем, являются ли image_1 и image_2 строками (старый формат)
+       foreach (['image_1', 'image_2'] as $img_key) {
+           if (isset($settings[$img_key]) && is_string($settings[$img_key])) {
+               // Предполагаем, что строка - это URL
+               $url = $settings[$img_key];
+               $id = isset($settings[$img_key . '_id']) && is_numeric($settings[$img_key . '_id']) ? (int)$settings[$img_key . '_id'] : 0;
+
+               // Получаем URL из ID, если ID валидный и URL пуст
+               if ($id && !$url) {
+                   $url = wp_get_attachment_url($id);
+               }
+
+               // Заменяем строку на массив
+               $settings[$img_key] = array(
+                   'id' => $id,
+                   'url' => esc_url_raw($url) // Санитизируем URL
+               );
+
+               // Удаляем старое поле ID, если оно было
+               unset($settings[$img_key . '_id']);
+           } elseif (!isset($settings[$img_key]) || !is_array($settings[$img_key])) {
+               // Если ключа нет или значение не массив, устанавливаем по умолчанию
+               $settings[$img_key] = $defaults[$img_key];
+           }
+       }
+       // --- Конец миграции ---
    }
 
-   $settings = get_option('legerebeaute_about_settings', array());
-   $settings = wp_parse_args($settings, array(
-      'title' => 'О компании',
-      'text' => '',
-      'image_1' => '',
-      'image_1_id' => 0,
-      'image_2' => '',
-      'image_2_id' => 0,
-      'page_link' => '',
-      'button_text' => 'Больше о нас',
-      'form_shortcode' => ''
-   ));
    ?>
    <div class="wrap">
       <h1>Настройки блока «О компании»</h1>
@@ -89,38 +127,28 @@ function legerebeaute_render_about_settings_page()
             <tr>
                <th scope="row">Изображение 1</th>
                <td>
-                  <div class="legerebeaute-media-field">
-                     <img src="<?php echo esc_url($settings['image_1']); ?>"
-                        class="legerebeaute-preview-image <?php echo empty($settings['image_1']) ? 'hidden' : ''; ?>"
-                        style="max-width: 200px; margin-bottom: 10px;">
-                     <input type="hidden" id="image_1" name="image_1" value="<?php echo esc_url($settings['image_1']); ?>">
-                     <input type="hidden" id="image_1_id" name="image_1_id"
-                        value="<?php echo esc_attr($settings['image_1_id']); ?>">
-                     <button type="button" class="button legerebeaute-upload-btn" data-field="image_1">Выбрать
-                        изображение</button>
-                     <button type="button"
-                        class="button legerebeaute-remove-btn <?php echo empty($settings['image_1']) ? 'hidden' : ''; ?>"
-                        data-field="image_1">Удалить</button>
-                  </div>
+                   <?php
+                   echo Legerebeaute_Image_Helper::render_image_field('image_1', array(
+                       'value_id' => $settings['image_1']['id'],
+                       'value_url' => $settings['image_1']['url'],
+                       'label' => 'Изображение 1',
+                       'description' => 'Выберите первое изображение для блока "О компании".',
+                   ));
+                   ?>
                </td>
             </tr>
 
             <tr>
                <th scope="row">Изображение 2</th>
                <td>
-                  <div class="legerebeaute-media-field">
-                     <img src="<?php echo esc_url($settings['image_2']); ?>"
-                        class="legerebeaute-preview-image <?php echo empty($settings['image_2']) ? 'hidden' : ''; ?>"
-                        style="max-width: 200px; margin-bottom: 10px;">
-                     <input type="hidden" id="image_2" name="image_2" value="<?php echo esc_url($settings['image_2']); ?>">
-                     <input type="hidden" id="image_2_id" name="image_2_id"
-                        value="<?php echo esc_attr($settings['image_2_id']); ?>">
-                     <button type="button" class="button legerebeaute-upload-btn" data-field="image_2">Выбрать
-                        изображение</button>
-                     <button type="button"
-                        class="button legerebeaute-remove-btn <?php echo empty($settings['image_2']) ? 'hidden' : ''; ?>"
-                        data-field="image_2">Удалить</button>
-                  </div>
+                   <?php
+                   echo Legerebeaute_Image_Helper::render_image_field('image_2', array(
+                       'value_id' => $settings['image_2']['id'],
+                       'value_url' => $settings['image_2']['url'],
+                       'label' => 'Изображение 2',
+                       'description' => 'Выберите второе изображение для блока "О компании".',
+                   ));
+                   ?>
                </td>
             </tr>
 
@@ -155,78 +183,5 @@ function legerebeaute_render_about_settings_page()
          <?php submit_button('Сохранить настройки'); ?>
       </form>
    </div>
-
-   <script>
-      jQuery(document).ready(function ($) {
-         // Медиа-фрейм для выбора изображений
-         var legerebeaute_media_frame;
-
-         $('.legerebeaute-upload-btn').on('click', function (e) {
-            e.preventDefault();
-
-            var $btn = $(this);
-            var field = $btn.data('field');
-            var $preview = $btn.closest('.legerebeaute-media-field').find('.legerebeaute-preview-image');
-            var $input = $('#' + field);
-            var $idInput = $('#' + field + '_id');
-
-            // Если фрейм уже существует, открываем его
-            if (legerebeaute_media_frame) {
-               legerebeaute_media_frame.open();
-               return;
-            }
-
-            // Создаем новый фрейм
-            legerebeaute_media_frame = wp.media.frames.legerebeauteMedia = wp.media({
-               title: 'Выберите изображение',
-               button: {
-                  text: 'Использовать это изображение'
-               },
-               multiple: false
-            });
-
-            // При выборе изображения
-            legerebeaute_media_frame.on('select', function () {
-               var attachment = legerebeaute_media_frame.state().get('selection').first().toJSON();
-
-               $input.val(attachment.url);
-               $idInput.val(attachment.id);
-               $preview.attr('src', attachment.url).removeClass('hidden');
-               $btn.siblings('.legerebeaute-remove-btn').removeClass('hidden');
-            });
-
-            legerebeaute_media_frame.open();
-         });
-
-         // Удаление изображения
-         $('.legerebeaute-remove-btn').on('click', function (e) {
-            e.preventDefault();
-
-            var $btn = $(this);
-            var field = $btn.data('field');
-            var $preview = $btn.closest('.legerebeaute-media-field').find('.legerebeaute-preview-image');
-            var $input = $('#' + field);
-            var $idInput = $('#' + field + '_id');
-
-            $input.val('');
-            $idInput.val('');
-            $preview.attr('src', '').addClass('hidden');
-            $btn.addClass('hidden');
-         });
-      });
-   </script>
-   <style>
-      .legerebeaute-media-field {
-         margin: 10px 0;
-      }
-
-      .legerebeaute-preview-image.hidden {
-         display: none;
-      }
-
-      .legerebeaute-remove-btn.hidden {
-         display: none;
-      }
-   </style>
    <?php
 }

@@ -18,6 +18,8 @@ require_once get_template_directory() . '/inc/admin/settings-general.php';
 require_once get_template_directory() . '/inc/admin/settings-hero.php';
 require_once get_template_directory() . '/inc/admin/settings-detox-test.php';
 require_once get_template_directory() . '/inc/admin/settings-about.php';
+require_once get_template_directory() . '/inc/admin/settings-values.php';
+require_once get_template_directory() . '/inc/admin/settings-interior.php';
 
 // Утилиты
 require_once get_template_directory() . '/inc/utils/svg-upload.php';
@@ -38,3 +40,4 @@ require_once get_template_directory() . '/inc/pages/page-about.php';
 
 // Хелперы
 require_once get_template_directory() . '/inc/helpers/helpers.php';
+include_once get_template_directory() . '/inc/helpers/image_helper.php';

@@ -59,5 +59,4 @@ if (empty($benefits)) {
          },
       });
    });
-
 </script>
