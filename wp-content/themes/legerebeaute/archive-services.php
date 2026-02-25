@@ -57,4 +57,6 @@ get_header(); ?>
    </main>
 </div>
 
+<?php get_template_part('template-parts/blocks/detox-test'); ?>
+
 <?php get_footer(); ?>

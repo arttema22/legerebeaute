@@ -339,7 +339,7 @@ function legerebeaute_save_service_meta($post_id)
             $benefits[] = array(
                'title' => sanitize_text_field($data['title']),
                'text' => sanitize_text_field($data['text']),
-               'image' => $processed_image // Сохраняем обработанную структуру
+               'image' => $processed_image
             );
          }
       }
