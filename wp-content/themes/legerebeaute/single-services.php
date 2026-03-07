@@ -25,13 +25,12 @@ get_header(); ?>
          }
          $benefits = legerebeaute_get_service_meta(get_the_ID(), 'benefits');
          $short_description = legerebeaute_get_service_meta(get_the_ID(), 'short_description');
-         $price_current = legerebeaute_get_service_meta(get_the_ID(), 'price_current');
-         $price_old = legerebeaute_get_service_meta(get_the_ID(), 'price_old');
+         $price_options = legerebeaute_get_service_meta(get_the_ID(), 'price_options');
          $duration = legerebeaute_get_service_meta(get_the_ID(), 'duration');
          $booking_enabled = legerebeaute_get_service_meta(get_the_ID(), 'booking_enabled');
-         $image_url = get_the_post_thumbnail_url(get_the_ID(), 'large'); // Или другой размер
-         $image_2_id = legerebeaute_get_service_meta(get_the_ID(), 'image_2'); // Получаем ID изображения 2
-         $image_2_url = wp_get_attachment_image_url($image_2_id, 'full'); // Получаем URL изображения (замените 'full' на нужный размер)
+         $image_url = get_the_post_thumbnail_url(get_the_ID(), 'large');
+         $image_2_id = legerebeaute_get_service_meta(get_the_ID(), 'image_2');
+         $image_2_url = wp_get_attachment_image_url($image_2_id, 'full');
          ?>
          <article id="post-<?php the_ID(); ?>" <?php post_class('single'); ?>>
 
@@ -112,25 +111,71 @@ get_header(); ?>
             }
             ?>
 
+            <?php if ($price_options): ?>
+               <section class="service-prices">
+                  <h2 class="section-header">Стоимость услуги</h2>
+                  <div class="service-single__price">
+                     <div class="service-single__items">
+                        <h5><?php the_title() ?></h5>
+                        <?php foreach ($price_options as $option): ?>
+                           <div class="service-single__item">
+
+                              <div class="service-single__price-name">
+                                 <p><?php echo esc_html($option['name']); ?></p>
+
+
+                                 <?php if (!empty($option['description'])): ?>
+                                    <div class="btn btn-open-description-modal">
+                                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 21" fill="none">
+                                          <circle cx="10.5121" cy="10.4233" r="9.60394" stroke="#1D1D1B" stroke-width="0.746566">
+                                          </circle>
+                                          <path
+                                             d="M9.85409 12.5394C9.85409 12.1194 9.96609 11.7321 10.1901 11.3774C10.4141 11.0228 10.7548 10.5888 11.2121 10.0754C11.6508 9.57144 11.9728 9.15611 12.1781 8.82944C12.3928 8.49344 12.5001 8.13411 12.5001 7.75144C12.5001 7.21944 12.2901 6.82277 11.8701 6.56144C11.4594 6.30011 10.8808 6.16944 10.1341 6.16944C9.25675 6.16944 8.39809 6.42144 7.55808 6.92544V6.12744C7.93142 5.89411 8.34675 5.71211 8.80409 5.58144C9.26142 5.44144 9.74208 5.37144 10.2461 5.37144C11.1701 5.37144 11.9168 5.57211 12.4861 5.97344C13.0554 6.37477 13.3401 6.94411 13.3401 7.68144C13.3401 8.14811 13.2188 8.57744 12.9761 8.96944C12.7428 9.35211 12.3834 9.81877 11.8981 10.3694C11.4874 10.8268 11.1748 11.2188 10.9601 11.5454C10.7548 11.8628 10.6521 12.1941 10.6521 12.5394H9.85409ZM9.68609 14.8914C9.68609 14.7234 9.74209 14.5928 9.85409 14.4994C9.96609 14.3968 10.1014 14.3454 10.2601 14.3454C10.4188 14.3454 10.5494 14.3968 10.6521 14.4994C10.7641 14.5928 10.8201 14.7234 10.8201 14.8914C10.8201 15.0594 10.7641 15.1948 10.6521 15.2974C10.5494 15.3908 10.4188 15.4374 10.2601 15.4374C10.1014 15.4374 9.96609 15.3908 9.85409 15.2974C9.74209 15.1948 9.68609 15.0594 9.68609 14.8914Z"
+                                             fill="#1D1D1B">
+                                          </path>
+                                       </svg>
+                                    </div>
+                                    <!-- Модальное окно для описания -->
+                                    <div id="description-modal" class="modal-overlay" style="display: none;">
+                                       <div class="modal-content">
+                                          <span class="close">&times;</span>
+                                          <p id="modal-description-text"></p>
+                                          <p class="service-single__price-description">
+                                             <?php echo esc_html($option['description']); ?>
+                                          </p>
+                                       </div>
+                                    </div>
+                                 <?php endif; ?>
+                              </div>
+
+                              <div>
+                                 <p>Цена<br>
+                                    <strong><span class="service-single__price-value"><?php echo esc_html($option['price']); ?>
+                                          руб.</span></strong>
+                                 </p>
+                              </div>
+
+                              <?php if ($booking_enabled) {
+                                 lb_booking_button();
+                              } ?>
+
+                           </div>
+                        <?php endforeach; ?>
+                     </div>
+                  </div>
+               </section>
+            <?php endif; ?>
+
             <?php if ($price_current || $price_old): ?>
                <section class="service-prices">
-                  <h2>Стоимость Услуги</h2>
                   <div class="service-single__price">
-
-                     <?php if ($price_current): ?>
-                        <div>
-                           <span class="price-current"><?php echo esc_html($price_current); ?> ₽</span>
-                           <?php if ($price_old && $price_current != $price_old): ?>
-                              <span class="price-old"><?php echo esc_html($price_old); ?> ₽</span>
-                           <?php endif; ?>
-                        </div>
-                     <?php endif; ?>
                      <?php if ($booking_enabled) {
                         lb_booking_button();
                      } ?>
                   </div>
                </section>
             <?php endif; ?>
+
          </article>
       <?php endwhile; ?>
 

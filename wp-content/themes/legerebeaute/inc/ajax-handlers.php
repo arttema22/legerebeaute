@@ -35,7 +35,7 @@ function legerebeaute_filter_services_ajax_handler()
       while ($query->have_posts()) {
          $query->the_post();
          ob_start();
-         get_template_part('template-parts/content', 'round-card');
+         get_template_part('template-parts/content', 'simple-card');
          $html .= ob_get_clean();
       }
       wp_reset_postdata();

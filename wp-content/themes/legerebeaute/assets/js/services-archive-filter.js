@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', function () {
    });
 
    function fetchServices(categorySlug) {
-      servicesGrid.innerHTML = '<p>Загрузка...</p>';
+      servicesGrid.innerHTML = '';
+      // servicesGrid.innerHTML = '<p>Загрузка...</p>';
       const data = new FormData();
       data.append('action', 'legerebeaute_filter_services');
       data.append('category', categorySlug);

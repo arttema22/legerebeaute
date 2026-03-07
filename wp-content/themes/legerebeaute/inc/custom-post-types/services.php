@@ -1,10 +1,17 @@
 <?php
 /**
  * CPT "Услуги" + таксономия "Категории услуг" + метаполя
- * _legerebeaute_main_title, _legerebeaute_short_description, _legerebeaute_gallery,
- * _legerebeaute_benefits, _legerebeaute_effects_txt, _legerebeaute_effects_img,
- * _legerebeaute_price_current, _legerebeaute_price_old, _legerebeaute_duration,
- * _legerebeaute_booking_enabled, _legerebeaute_show_on_home, _legerebeaute_image_2
+ * _legerebeaute_main_title
+ * _legerebeaute_short_description
+ * _legerebeaute_gallery
+ * _legerebeaute_benefits
+ * _legerebeaute_effects_txt
+ * _legerebeaute_effects_img
+ * _legerebeaute_price_options
+ * _legerebeaute_duration
+ * _legerebeaute_booking_enabled
+ * _legerebeaute_show_on_home
+ * _legerebeaute_image_2
  */
 
 if (!defined('ABSPATH')) {
@@ -85,19 +92,14 @@ function legerebeaute_add_service_meta_boxes()
 {
    add_meta_box('legerebeaute_service_details', 'Детали услуги', 'legerebeaute_service_details_meta_box_callback', 'services', 'normal', 'high');
    add_meta_box('legerebeaute_service_benefits', 'Преимущества', 'legerebeaute_service_benefits_meta_box_callback', 'services', 'normal', 'high');
+   add_meta_box('legerebeaute_service_price_options', 'Цены', 'legerebeaute_service_price_options_meta_box_callback', 'services', 'normal', 'default');
    add_meta_box('legerebeaute_service_effects_txt', 'Эффекты в тексте', 'legerebeaute_service_effects_txt_meta_box_callback', 'services', 'normal', 'default');
    add_meta_box('legerebeaute_service_effects_img', 'Эффекты на фото', 'legerebeaute_service_effects_img_meta_box_callback', 'services', 'normal', 'default');
-   add_meta_box('legerebeaute_service_prices', 'Цены', 'legerebeaute_service_prices_meta_box_callback', 'services', 'side', 'default');
    add_meta_box('legerebeaute_service_features', 'Характеристики', 'legerebeaute_service_features_meta_box_callback', 'services', 'side', 'default');
    add_meta_box('legerebeaute_service_image_2', 'Изображение 2', 'legerebeaute_service_image_2_meta_box_callback', 'services', 'side', 'default');
 }
 add_action('add_meta_boxes', 'legerebeaute_add_service_meta_boxes');
 
-// === Подключение скриптов для галереи и универсального хелпера ===
-// function legerebeaute_enqueue_media_uploader($hook) { /* УДАЛЕНО */ }
-// add_action('admin_enqueue_scripts', 'legerebeaute_enqueue_media_uploader'); /* УДАЛЕНО */
-
-// Новый способ подключения скриптов
 function legerebeaute_enqueue_services_admin_scripts($hook)
 {
    global $post;
@@ -165,7 +167,6 @@ function legerebeaute_service_benefits_meta_box_callback($post)
    echo '</tbody></table>';
    echo '<button type="button" class="button button-small" onclick="addBenefitRow()">Добавить преимущество</button>';
 
-   // Шаблон новой строки
    echo '<tr class="benefit-row-template" style="display: none;">';
    echo '<td style="border:1px solid #ccc;padding:5px;width:150px">';
    echo Legerebeaute_Image_Helper::render_image_field("legerebeaute_benefits[NEW_INDEX][image]", array(
@@ -205,6 +206,68 @@ function legerebeaute_service_benefits_meta_box_callback($post)
     </script>';
 }
 
+// === Вывод полей в блоке "Цены" ===
+function legerebeaute_service_price_options_meta_box_callback($post)
+{
+   $price_options_serialized = get_post_meta($post->ID, '_legerebeaute_price_options', true);
+   $price_options = maybe_unserialize($price_options_serialized);
+   if (!is_array($price_options)) {
+      $price_options = [];
+   }
+   ?>
+   <table id="price-options-table" style="margin-bottom: 10px; width: 100%; border-collapse: collapse;">
+      <thead>
+         <tr>
+            <th style="border: 1px solid #ccc; padding: 5px;">Название</th>
+            <th style="border: 1px solid #ccc; padding: 5px;">Описание</th>
+            <th style="border: 1px solid #ccc; padding: 5px;">Цена</th>
+            <th style="border: 1px solid #ccc; padding: 5px;"></th>
+         </tr>
+      </thead>
+      <tbody>
+         <?php foreach ($price_options as $index => $option): ?>
+            <tr>
+               <td style="border: 1px solid #ccc; padding: 5px;">
+                  <input type="text" name="legerebeaute_price_options[<?php echo $index; ?>][name]"
+                     value="<?php echo esc_attr($option['name'] ?? ''); ?>" style="width: 100%;">
+               </td>
+               <td style="border: 1px solid #ccc; padding: 5px;">
+                  <textarea name="legerebeaute_price_options[<?php echo $index; ?>][description]" rows="2"
+                     style="width: 100%;"><?php echo esc_textarea($option['description'] ?? ''); ?></textarea>
+               </td>
+               <td style="border: 1px solid #ccc; padding: 5px;">
+                  <input type="text" name="legerebeaute_price_options[<?php echo $index; ?>][price]"
+                     value="<?php echo esc_attr($option['price'] ?? ''); ?>" style="width: 100%;">
+               </td>
+               <td style="border: 1px solid #ccc; padding: 5px;">
+                  <button type="button" class="button button-small" onclick="removePriceOptionRow(this)">Удалить</button>
+               </td>
+            </tr>
+         <?php endforeach; ?>
+      </tbody>
+   </table>
+   <button type="button" class="button button-small" onclick="addPriceOptionRow()">Добавить цену</button>
+   <script>
+      let priceOptionIndex = <?php echo count($price_options); ?>;
+      function addPriceOptionRow() {
+         const tableBody = document.querySelector('#price-options-table tbody');
+         const newRow = document.createElement('tr');
+         newRow.innerHTML = `
+              <td style="border: 1px solid #ccc; padding: 5px;"><input type="text" name="legerebeaute_price_options[\${priceOptionIndex}][name]" style="width: 100%;"></td>
+              <td style="border: 1px solid #ccc; padding: 5px;"><textarea name="legerebeaute_price_options[\${priceOptionIndex}][description]" rows="2" style="width: 100%;"></textarea></td>
+              <td style="border: 1px solid #ccc; padding: 5px;"><input type="text" name="legerebeaute_price_options[\${priceOptionIndex}][price]" style="width: 100%;"></td>
+              <td style="border: 1px solid #ccc; padding: 5px;"><button type="button" class="button button-small" onclick="removePriceOptionRow(this)">Удалить</button></td>
+          `;
+         tableBody.appendChild(newRow);
+         priceOptionIndex++;
+      }
+      function removePriceOptionRow(button) {
+         const row = button.closest('tr');
+         row.remove();
+      }
+   </script>
+   <?php
+}
 
 // === Вывод полей в блоке "Эффекты в тексте" ===
 function legerebeaute_service_effects_txt_meta_box_callback($post)
@@ -232,16 +295,6 @@ function legerebeaute_service_effects_img_meta_box_callback($post)
       echo '<tr><td style="border:1px solid #ccc;padding:5px"><input type="text" name="legerebeaute_effects_img[' . $i . '][text]" value="' . esc_attr($e['text'] ?? '') . '" style="width:100%"></td><td style="border:1px solid #ccc;padding:5px"><button type="button" class="button button-small" onclick="removeEffectImgRow(this)">Удалить</button></td></tr>';
    }
    echo '</tbody></table><button type="button" class="button button-small" onclick="addEffectImgRow()">Добавить эффект</button><script>let effectImgIndex=' . count($effects) . ';function addEffectImgRow(){const t=document.querySelector("#effects-img-table tbody");const r=document.createElement("tr");r.innerHTML=\'<td style="border:1px solid #ccc;padding:5px"><input type="text" name="legerebeaute_effects_img[\'+effectImgIndex+\'][text]" style="width:100%"></td><td style="border:1px solid #ccc;padding:5px"><button type="button" class="button button-small" onclick="removeEffectImgRow(this)">Удалить</button></td>\';t.appendChild(r);effectImgIndex++}function removeEffectImgRow(t){t.closest("tr").remove()}</script>';
-}
-
-// === Вывод полей в блоке "Цены" ===
-function legerebeaute_service_prices_meta_box_callback($post)
-{
-   $price_current = get_post_meta($post->ID, '_legerebeaute_price_current', true);
-   $price_old = get_post_meta($post->ID, '_legerebeaute_price_old', true);
-
-   echo '<div><label for="legerebeaute_price_current">Текущая цена:</label><input type="text" id="legerebeaute_price_current" name="legerebeaute_price_current" value="' . esc_attr($price_current) . '" placeholder="4500" style="width:100%"></div>';
-   echo '<div><label for="legerebeaute_price_old">Старая цена:</label><input type="text" id="legerebeaute_price_old" name="legerebeaute_price_old" value="' . esc_attr($price_old) . '" placeholder="5500" style="width:100%"></div>';
 }
 
 // === Вывод полей в блоке "Характеристики" ===
@@ -285,7 +338,7 @@ function legerebeaute_save_service_meta($post_id)
       return;
 
    // Простые текстовые поля
-   $text_fields = ['main_title', 'short_description', 'price_current', 'price_old', 'duration'];
+   $text_fields = ['main_title', 'short_description', 'duration'];
    foreach ($text_fields as $field) {
       if (isset($_POST["legerebeaute_{$field}"])) {
          update_post_meta($post_id, "_legerebeaute_{$field}", sanitize_text_field($_POST["legerebeaute_{$field}"]));
@@ -346,6 +399,21 @@ function legerebeaute_save_service_meta($post_id)
    }
    update_post_meta($post_id, '_legerebeaute_benefits', $benefits); // Теперь НЕ serialize, а обычный массив
 
+   // Сохранение repeater из "Цены"
+   $price_options = [];
+   if (isset($_POST['legerebeaute_price_options']) && is_array($_POST['legerebeaute_price_options'])) {
+      foreach ($_POST['legerebeaute_price_options'] as $option_data) {
+         if (isset($option_data['name']) && isset($option_data['price'])) { // Проверяем обязательные поля
+            $price_options[] = [
+               'name' => sanitize_text_field($option_data['name']),
+               'description' => sanitize_textarea_field($option_data['description']), // Используем sanitize_textarea_field для описания
+               'price' => sanitize_text_field($option_data['price']) // Или sanitize_price если нужна специальная обработка
+            ];
+         }
+      }
+   }
+   update_post_meta($post_id, '_legerebeaute_price_options', serialize($price_options));
+
    // Repeater: Эффекты в тексте
    $effects_txt = [];
    if (isset($_POST['legerebeaute_effects_txt']) && is_array($_POST['legerebeaute_effects_txt'])) {
@@ -368,7 +436,7 @@ function legerebeaute_save_service_meta($post_id)
    }
    update_post_meta($post_id, '_legerebeaute_effects_img', serialize($effects_img));
 
-   // Изображение 2 (обновлено)
+   // Изображение 2
    $image_2_data = Legerebeaute_Image_Helper::process_image_field_from_post('_legerebeaute_image_2');
    update_post_meta($post_id, '_legerebeaute_image_2', $image_2_data); // Теперь НЕ serialize, а обычный массив
 }
@@ -382,10 +450,10 @@ if (!function_exists('legerebeaute_get_service_meta')) {
          $post_id = get_the_ID();
       $value = get_post_meta($post_id, '_legerebeaute_' . $key, true);
 
-      // Обновленный список ключей, которые нужно десериализовать (старые поля)
-      $serialized_keys = ['booking_time_slots', 'gallery', 'effects_txt', 'effects_img'];
+      // Обновленный список ключей, которые нужно десериализовать 
+      $serialized_keys = ['benefits', 'price_options', 'image_2', 'booking_time_slots', 'gallery', 'effects_txt', 'effects_img'];
       // Ключи, которые НЕ нужно десериализовать (новые поля, хранящиеся как массивы)
-      $array_keys = ['benefits', 'image_2'];
+      // $array_keys = ['benefits', 'price_options', 'image_2'];
 
       if (in_array($key, $serialized_keys)) {
          $unserialized = maybe_unserialize($value);
@@ -393,9 +461,9 @@ if (!function_exists('legerebeaute_get_service_meta')) {
             return $unserialized;
       }
       // Для новых массивов просто возвращаем значение
-      if (in_array($key, $array_keys)) {
-         return $value; // $value уже должен быть массивом
-      }
+      //if (in_array($key, $array_keys)) {
+      //   return $value; // $value уже должен быть массивом
+      //}
 
       return $value;
    }
