@@ -1,0 +1,66 @@
+# Translation of Plugins - Categories Images - Stable (latest release) in Russian
+# This file is distributed under the same license as the Plugins - Categories Images - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-10-20 14:24:52+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.0.3\n"
+"Language: ru\n"
+"Project-Id-Version: Plugins - Categories Images - Stable (latest release)\n"
+
+#. Author URI of the plugin/theme
+msgid "http://zahlan.net/"
+msgstr "http://zahlan.net/"
+
+#. Author of the plugin/theme
+msgid "Muhammad Said El Zahlan"
+msgstr "Muhammad Said El Zahlan"
+
+#. Description of the plugin/theme
+msgid "Categories Images Plugin allow you to add an image to category or any custom term."
+msgstr "Плагин Categories Images позволит вам добавить изображение рубрикам и любым таксономиям"
+
+#. Plugin URI of the plugin/theme
+msgid "http://zahlan.net/blog/2012/06/categories-images/"
+msgstr "http://zahlan.net/blog/2012/06/categories-images/"
+
+#: categories-images.php:305
+msgid "You do not have sufficient permissions to access this page."
+msgstr "У вас не хватает прав для доступа к данной странице."
+
+#: categories-images.php:285
+msgid "Please select the taxonomies you want to exclude it from Categories Images plugin"
+msgstr "Выберите таксономии которые не должны обслуживаться плагином"
+
+#: categories-images.php:280
+msgid "Excluded Taxonomies"
+msgstr "Исключённые таксономии"
+
+#. #-#-#-#-#  categories-images-code.pot (Categories Images 2.5.4)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: categories-images.php:272 categories-images.php:310
+msgid "Categories Images"
+msgstr "Categories Images"
+
+#: categories-images.php:272 categories-images.php:279
+msgid "Categories Images settings"
+msgstr "Настройки Categories Images"
+
+#: categories-images.php:252
+msgid "Thumbnail"
+msgstr "Миниатюра"
+
+#: categories-images.php:88 categories-images.php:217
+msgid "Remove image"
+msgstr "Удалить изображение"
+
+#: categories-images.php:67 categories-images.php:87 categories-images.php:216
+msgid "Upload/Add image"
+msgstr "Загрузить/добавить изображение"
+
+#: categories-images.php:64 categories-images.php:85 categories-images.php:234
+msgid "Image"
+msgstr "Изображение"

@@ -126,33 +126,6 @@
    align-items: center;
 }
 
-.service-single__items {
-   width: 100%;
-   background-color: white;
-   border-radius: var(--border-radius);
-   padding: 4rem 2rem;
-}
-
-.service-single__item {
-   display: flex;
-   justify-content: space-between;
-   align-items: end;
-   padding-top: 1rem;
-   padding-bottom: 1rem;
-   border-bottom: 1px solid var(--border-color);
-}
-
-.service-single__item:first-of-type {
-   border-top: 1px solid var(--border-color);
-}
-
-.service-single__price-name {
-   width: 30%;
-   display: flex;
-   justify-content: space-between;
-   align-items: flex-start;
-}
-
 @media (min-width: 768px) {
    .single__header,
    .single__body {

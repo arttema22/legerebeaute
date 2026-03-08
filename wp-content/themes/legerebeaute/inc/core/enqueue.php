@@ -40,13 +40,10 @@ function legerebeaute_enqueue_assets()
    wp_enqueue_style('swiper', get_template_directory_uri() . '/assets/css/base/swiper.css', [], '11.2.10');
    wp_enqueue_script('swiper', get_template_directory_uri() . '/assets/js/swiper.js', [], '11.2.10', true);
 
-
    // Скрипты
    wp_enqueue_script('legerebeaute-booking-form', get_template_directory_uri() . '/assets/js/booking-form.js', [], $version, true);
    wp_enqueue_script('legerebeaute-main', get_template_directory_uri() . '/assets/js/main.js', [], $version, true);
    wp_enqueue_script('services-archive-filter-js', get_template_directory_uri() . '/assets/js/services-archive-filter.js', [], '1.0', true);
-
-
 
    wp_localize_script('services-archive-filter-js', 'legerebeaute_archive_vars', array(
       'ajax_url' => admin_url('admin-ajax.php'), // Передаём URL для AJAX-запросов

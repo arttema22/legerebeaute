@@ -1,0 +1,155 @@
+.lb-accordeon {
+   width: 100%;
+}
+
+.accordeon-item {
+   width: 100%;
+   margin-bottom: 1rem;
+   padding: 1rem 1rem 1rem 2rem;
+   background-color: var(--color-primary-light);
+   border: none;
+   border-radius: var(--border-radius);
+}
+
+.lb-accordeon-trigger {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   width: 100%;
+   cursor: pointer;
+   background-color: inherit;
+   border: none;
+   transition:
+      padding 0.3s ease,
+      color 0.3s ease,
+      background-color 0.3s ease;
+}
+
+.lb-accordeon-trigger:hover {
+   color: var(--color-primary);
+}
+
+.accordeon-title {
+   font-size: 1.2rem;
+}
+.accordeon-icon {
+   width: 30px;
+   height: 30px;
+   position: relative;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   transition: transform 0.3s ease;
+   background-color: var(--color-link);
+   color: white;
+   border-radius: 50%;
+}
+
+.accordeon-icon::before,
+.accordeon-icon::after {
+   content: "";
+   position: absolute;
+   background-color: currentColor;
+   transition: transform 0.3s ease;
+}
+
+.accordeon-icon::before {
+   width: 50%;
+   height: 2px;
+}
+
+.accordeon-icon::after {
+   width: 2px;
+   height: 50%;
+}
+
+/* Состояние активно */
+.lb-accordeon-trigger.is-active .accordeon-icon::after {
+   transform: rotate(90deg);
+}
+
+.accordeon-content {
+   max-height: 0;
+   overflow: hidden;
+   transition: max-height 0.4s ease-out;
+   background-color: white;
+   border-radius: var(--border-radius);
+}
+
+.accordeon-inner {
+   display: flex;
+   justify-content: space-between;
+   gap: 40px;
+   padding: 1rem;
+}
+
+.accordeon-card__grid {
+   flex: 1;
+   padding: 1rem;
+}
+
+.accordeon-card__img {
+   display: none;
+   flex: 1;
+   border-radius: var(--border-radius);
+   overflow: hidden;
+}
+
+.accordeon-card {
+   border-bottom: 1px solid var(--border-color);
+   margin-bottom: 2rem;
+}
+
+.accordeon-card:last-child {
+   border-bottom: none;
+   margin-bottom: 0;
+}
+
+.accordeon-card__item {
+   display: flex;
+   justify-content: space-between;
+   gap: var(--gap);
+   align-items: center;
+   margin-bottom: 1rem;
+}
+
+.accordeon-card__head {
+   display: flex;
+   justify-content: flex-start;
+   align-items: baseline;
+   gap: 10px;
+   flex: 1;
+}
+
+.accordeon-card__title {
+   font-family: var(--font-family-base);
+   font-size: var(--font-size-base);
+   text-transform: none;
+   margin: 0;
+}
+
+.accordeon-card__price {
+}
+
+.accordeon-card__button {
+}
+
+.service-card__more {
+   padding: 0;
+   text-decoration: underline;
+   font-size: 0.8rem;
+}
+
+.service-card__description {
+   width: 1rem;
+}
+
+.service-card__desc {
+   margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+   .accordeon-card__img {
+      display: block;
+   }
+}

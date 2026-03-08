@@ -12,8 +12,10 @@ get_header(); ?>
       <header class="page-header">
          <h1><?php post_type_archive_title(); ?></h1>
       </header>
+
+
       <!-- Блок фильтра -->
-      <div class="services-filter">
+      <!-- <div class="services-filter">
          <button type="button" class="filter-btn active" data-category="all">Все услуги</button>
          <?php
          $categories = get_terms(array(
@@ -27,9 +29,9 @@ get_header(); ?>
             }
          }
          ?>
-      </div>
+      </div> -->
       <!-- Контейнер для услуг -->
-      <div class="simple-grid" id="cards-grid">
+      <!-- <div class="simple-grid" id="cards-grid">
          <?php
          $initial_query_args = array(
             'post_type' => 'services',
@@ -51,9 +53,11 @@ get_header(); ?>
             echo '<p class="no-services-message">Услуг пока нет</p>';
          endif;
          ?>
-      </div>
+      </div> -->
    </div>
 </main>
+
+<?php get_template_part('template-parts/blocks/services'); ?>
 
 <?php get_template_part('template-parts/blocks/detox-test'); ?>
 
