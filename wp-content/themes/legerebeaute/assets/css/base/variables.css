@@ -1,6 +1,7 @@
 :root {
    --font-family-base: "Muller";
-   --font-size-base: 16px;
+   --font-size-base: 14px;
+   --font-size-small: 0.8rem;
    --line-height-base: 1.2;
 
    /* Цвета */
@@ -20,6 +21,8 @@
    --color-primary: #d4a869;
    --color-primary-light: #f1e2cd;
    --color-text-light: #e1e1e0;
+   --color-dark-blue: #0f253d;
+   --color-light-white: #fefefe80;
 
    --gap: 5px;
    --max-width: 100%;

@@ -60,25 +60,35 @@ get_header(); ?>
                      lb_booking_button();
                   } ?>
                </div>
-               <figure class="single__image-container">
-                  <?php if ($image_url): ?>
-                     <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr(get_the_title()); ?>"
-                        class="single__image">
-                  <?php endif; ?>
-                  <?php
-                  $effects_img = legerebeaute_get_service_meta(get_the_ID(), 'effects_img');
-                  if (!empty($effects_img)) {
-                     $template_args = [
-                        'effects_img' => $effects_img,
-                     ];
-                     $template_file = locate_template('template-parts/blocks/effects-img.php');
-                     if ($template_file) {
-                        extract($template_args, EXTR_SKIP);
-                        include $template_file;
+
+               <?php if ($image_url): ?>
+                  <div class="single__image-container" style="background-image: url(<?php echo esc_url($image_url); ?>);">
+                  <?php else: ?>
+                     <div class="single__image-container">
+                     <?php endif; ?>
+
+                     <?php
+                     $effects_img = legerebeaute_get_service_meta(get_the_ID(), 'effects_img');
+                     if (!empty($effects_img)) {
+                        $first_effect = array_shift($effects_img);
+                        ?>
+                        <div class="single__sub-description">
+                           <?= $first_effect['text'] ?>
+                        </div>
+                        <?php
+                        $remaining_effects = $effects_img;
+
+                        $template_args = [
+                           'effects_img' => $remaining_effects,
+                        ];
+                        $template_file = locate_template('template-parts/blocks/effects-img.php');
+                        if ($template_file) {
+                           extract($template_args, EXTR_SKIP);
+                           include $template_file;
+                        }
                      }
-                  }
-                  ?>
-               </figure>
+                     ?>
+                  </div>
             </header>
 
             <div class="single__body">

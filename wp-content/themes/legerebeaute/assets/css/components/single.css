@@ -18,7 +18,46 @@
    flex: 1;
    display: flex;
    flex-direction: column;
+   justify-content: space-between;
+   background-position: center;
+   background-repeat: no-repeat;
+   background-size: cover;
 }
+
+.single__image-container {
+   gap: 200px;
+}
+
+.single__sub-description {
+   /* position: absolute; */
+   background-color: white;
+   /* padding: 1.5rem 3rem 1.5rem 1rem; */
+   /* border-radius: 0 0 38px 0; */
+   margin: var(--gap) var(--gap) 0;
+   padding: 5px 10px;
+   border-radius: var(--border-radius);
+}
+
+/* .single__sub-description::before,
+.single__sub-description::after {
+   content: "";
+   display: block;
+   position: absolute;
+   width: 36px;
+   height: 36px;
+} */
+
+/* .single__sub-description::before {
+   left: 0;
+   bottom: -35px;
+   background-image: radial-gradient(circle at 100% 100%, transparent 36px, #fefefe 36px);
+} */
+
+/* .single__sub-description::after {
+   right: -35px;
+   top: 0;
+   background-image: radial-gradient(circle at 100% 100%, transparent 36px, #fefefe 36px);
+} */
 
 .single__title {
    display: inline-block;
@@ -38,7 +77,6 @@
 
 .effects-in-text-list {
    display: flex;
-   flex-wrap: wrap;
 }
 
 .effect-in-text-item {
@@ -65,7 +103,9 @@
 }
 
 .effect-in-text-data {
-   padding: 10px 20px 20px 0;
+   font-size: var(--font-size-small);
+   padding: 18px 8px 10px 0;
+   overflow-wrap: anywhere;
 }
 
 .single__image-container,
@@ -73,23 +113,26 @@
    overflow: hidden;
    border-radius: var(--border-radius);
    background-color: var(--color-primary);
-   position: relative;
-   height: auto;
 }
 
 .effects-in-img-block {
-   position: absolute;
-   bottom: 0;
-   left: 0;
-   margin: 10px;
+   display: flex;
+   flex-direction: column;
+   gap: var(--gap);
+   margin: 0 var(--gap) var(--gap);
 }
 
 .effect-in-img-item {
-   background-color: var(--color-text);
-   color: white;
-   margin-bottom: 5px;
+   font-size: var(--font-size-small);
+   background-color: var(--color-light-white);
+   color: var(--color-text);
    border-radius: var(--border-radius);
    padding: 5px 10px;
+}
+
+.effect-in-img-item:first-child {
+   background-color: var(--color-dark-blue);
+   color: white;
 }
 
 .service-single__duration {
@@ -141,15 +184,16 @@
    .single__short-description {
       font-size: 20px;
       line-height: 24px;
-      margin-bottom: 20px;
+      margin-bottom: 2rem;
    }
 
    .effects-in-text-list {
       flex-wrap: nowrap;
+      margin-bottom: 1rem;
    }
 
    .effect-in-text-data {
-      padding: 10px 10px 10px 0;
+      padding: 20px 10px 10px 0;
    }
 
    .effects-in-img-block {
