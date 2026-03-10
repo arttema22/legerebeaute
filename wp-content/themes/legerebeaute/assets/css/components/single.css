@@ -22,17 +22,27 @@
    background-position: center;
    background-repeat: no-repeat;
    background-size: cover;
+   order: 1;
 }
 
 .single__image-container {
-   gap: 200px;
+   overflow: hidden;
+   border-radius: var(--border-radius);
+   background-color: var(--color-primary);
+   align-items: flex-start;
+   min-height: 290px;
+}
+
+.single__image-container-2 {
+   border-radius: var(--border-radius);
+   justify-content: flex-end;
+   align-items: flex-start;
+   min-height: 290px;
+   order: 2;
 }
 
 .single__sub-description {
-   /* position: absolute; */
    background-color: white;
-   /* padding: 1.5rem 3rem 1.5rem 1rem; */
-   /* border-radius: 0 0 38px 0; */
    margin: var(--gap) var(--gap) 0;
    padding: 5px 10px;
    border-radius: var(--border-radius);
@@ -108,18 +118,12 @@
    overflow-wrap: anywhere;
 }
 
-.single__image-container,
-.single__image-container-2 {
-   overflow: hidden;
-   border-radius: var(--border-radius);
-   background-color: var(--color-primary);
-}
-
 .effects-in-img-block {
    display: flex;
    flex-direction: column;
+   align-items: flex-start;
    gap: var(--gap);
-   margin: 0 var(--gap) var(--gap);
+   margin: var(--gap);
 }
 
 .effect-in-img-item {
@@ -133,17 +137,6 @@
 .effect-in-img-item:first-child {
    background-color: var(--color-dark-blue);
    color: white;
-}
-
-.service-single__duration {
-   position: absolute;
-   bottom: 0;
-   left: 0;
-   color: white;
-   background-color: var(--color-text);
-   border-radius: var(--border-radius);
-   margin: 10px;
-   padding: 5px 10px;
 }
 
 .single__content ul {
@@ -176,24 +169,36 @@
       flex-direction: row;
    }
 
+   .single__content {
+      order: 2;
+   }
+
+   .single__image-container-2 {
+      order: 1;
+   }
+
+   .single__sub-description {
+      padding: 10px 20px;
+   }
+
    .single__title {
-      margin-bottom: 20px;
-      padding: 5px 30px;
+      /* margin-bottom: 20px; */
+      /* padding: 5px 30px; */
    }
 
    .single__short-description {
-      font-size: 20px;
-      line-height: 24px;
-      margin-bottom: 2rem;
+      /* font-size: 20px; */
+      /* line-height: 24px; */
+      /* margin-bottom: 2rem; */
    }
 
    .effects-in-text-list {
-      flex-wrap: nowrap;
-      margin-bottom: 1rem;
+      /* flex-wrap: nowrap; */
+      /* margin-bottom: 1rem; */
    }
 
    .effect-in-text-data {
-      padding: 20px 10px 10px 0;
+      /* padding: 20px 10px 10px 0; */
    }
 
    .effects-in-img-block {
@@ -201,13 +206,7 @@
    }
 
    .effect-in-img-item {
-      margin-bottom: 10px;
-      padding: 9px 22px;
-   }
-
-   .service-single__duration {
-      margin: 20px;
-      padding: 5px 15px;
+      padding: 5px 20px;
    }
 
    .single__content ul {
@@ -215,7 +214,7 @@
    }
 
    .service-single__price {
-      max-width: 80%;
-      padding: 1rem;
+      /* max-width: 80%; */
+      /* padding: 1rem; */
    }
 }

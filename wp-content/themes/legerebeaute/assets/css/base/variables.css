@@ -4,6 +4,8 @@
    --font-size-small: 0.8rem;
    --line-height-base: 1.2;
 
+   --gap: 5px;
+
    /* Цвета */
    --color-bg: #ffffff;
    --color-link: #1d1d1b;
@@ -23,8 +25,6 @@
    --color-text-light: #e1e1e0;
    --color-dark-blue: #0f253d;
    --color-light-white: #fefefe80;
-
-   --gap: 5px;
    --max-width: 100%;
 
    /* Размеры иконок (мобильные — базовые) */
@@ -41,7 +41,10 @@
 /* Планшеты и десктопы (от 768px) */
 @media (min-width: 768px) {
    :root {
-      --gap: 20px;
+      --font-size-base: 16px;
+      --font-size-small: 0.9rem;
+
+      --gap: 10px;
       --max-width: 1360px;
 
       --social-icon-size: 24px;

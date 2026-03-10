@@ -9,18 +9,21 @@ if (!defined('ABSPATH')) {
    exit;
 }
 
-// Ensure $effects_img is defined and is an array
-if (!isset($effects_img) || !is_array($effects_img) || empty($effects_img)) {
-   return;
-}
-?>
+if (isset($args['effects_data']) && is_array($args['effects_data'])) {
 
-<div class="effects-in-img-block">
-   <?php foreach ($effects_img as $effect): ?>
-      <?php if (isset($effect['text']) && !empty(trim($effect['text']))): ?>
-         <div class="effect-in-img-item">
-            <?php echo esc_html($effect['text']); ?>
-         </div>
-      <?php endif; ?>
-   <?php endforeach; ?>
-</div>
+   $effects_data_to_render = $args['effects_data'];
+
+   if (!empty($effects_data_to_render)) { ?>
+
+      <div class="effects-in-img-block">
+         <?php foreach ($effects_data_to_render as $effect) {
+            if (isset($effect['text'])) {
+               echo '<div class="effect-in-img-item">';
+               echo $effect['text'];
+               echo '</div>';
+            }
+         } ?>
+      </div>
+
+   <?php }
+} ?>

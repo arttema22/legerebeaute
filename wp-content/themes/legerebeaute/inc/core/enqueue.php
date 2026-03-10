@@ -40,6 +40,10 @@ function legerebeaute_enqueue_assets()
    wp_enqueue_style('swiper', get_template_directory_uri() . '/assets/css/base/swiper.css', [], '11.2.10');
    wp_enqueue_script('swiper', get_template_directory_uri() . '/assets/js/swiper.js', [], '11.2.10', true);
 
+   // Accordeon
+   wp_enqueue_style('lb-accordeon', get_template_directory_uri() . '/assets/css/components/accordeon.css', [], $version);
+   wp_enqueue_script('lb-accordeon', get_template_directory_uri() . '/assets/js/accordeon.js', [], $version, true);
+
    // Скрипты
    wp_enqueue_script('legerebeaute-booking-form', get_template_directory_uri() . '/assets/js/booking-form.js', [], $version, true);
    wp_enqueue_script('legerebeaute-main', get_template_directory_uri() . '/assets/js/main.js', [], $version, true);

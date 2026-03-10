@@ -150,13 +150,6 @@
    margin-bottom: 1rem;
 }
 
-.service-single__duration {
-   font-weight: bold;
-   background-color: #f0f0f0;
-   padding: 0.25rem 0.5rem;
-   border-radius: 4px;
-}
-
 .service-single__prices {
    display: flex;
    align-items: baseline;

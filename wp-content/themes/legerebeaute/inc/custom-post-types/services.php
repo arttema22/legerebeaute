@@ -4,14 +4,17 @@
  * _legerebeaute_main_title
  * _legerebeaute_short_description
  * _legerebeaute_gallery
+ * _legerebeaute_second_title
  * _legerebeaute_benefits
  * _legerebeaute_effects_txt
  * _legerebeaute_effects_img
+ * _legerebeaute_effects_img_2
  * _legerebeaute_price_options
  * _legerebeaute_duration
  * _legerebeaute_booking_enabled
  * _legerebeaute_show_on_home
  * _legerebeaute_image_2
+ * _legerebeaute_perfect_matches
  */
 
 if (!defined('ABSPATH')) {
@@ -95,8 +98,11 @@ function legerebeaute_add_service_meta_boxes()
    add_meta_box('legerebeaute_service_price_options', 'Цены', 'legerebeaute_service_price_options_meta_box_callback', 'services', 'normal', 'default');
    add_meta_box('legerebeaute_service_effects_txt', 'Эффекты в тексте', 'legerebeaute_service_effects_txt_meta_box_callback', 'services', 'normal', 'default');
    add_meta_box('legerebeaute_service_effects_img', 'Эффекты на фото', 'legerebeaute_service_effects_img_meta_box_callback', 'services', 'normal', 'default');
+   add_meta_box('legerebeaute_service_effects_img_2', 'Эффекты на фото 2', 'legerebeaute_service_effects_img_2_meta_box_callback', 'services', 'normal', 'default');
    add_meta_box('legerebeaute_service_features', 'Характеристики', 'legerebeaute_service_features_meta_box_callback', 'services', 'side', 'default');
    add_meta_box('legerebeaute_service_image_2', 'Изображение 2', 'legerebeaute_service_image_2_meta_box_callback', 'services', 'side', 'default');
+   add_meta_box('legerebeaute_service_perfect_matches', 'Идеально сочетается', 'legerebeaute_service_perfect_matches_meta_box_callback', 'services', 'normal', 'low');
+
 }
 add_action('add_meta_boxes', 'legerebeaute_add_service_meta_boxes');
 
@@ -105,8 +111,7 @@ function legerebeaute_enqueue_services_admin_scripts($hook)
    global $post;
    if (($hook == 'post-new.php' || $hook == 'post.php') && $post && $post->post_type == 'services') {
       Legerebeaute_Image_Helper::enqueue_admin_scripts();
-      // Подключить другие специфичные для CPT services скрипты, если есть
-      wp_enqueue_script('legerebeaute-services-benefits-js', get_template_directory_uri() . '/assets/js/admin/services-benefits-init.js', array('jquery'), '1.0', true);
+      // wp_enqueue_script('legerebeaute-services-benefits-js', get_template_directory_uri() . '/assets/js/admin/services-benefits-init.js', array('jquery'), '1.0', true);
    }
 }
 add_action('admin_enqueue_scripts', 'legerebeaute_enqueue_services_admin_scripts');
@@ -117,93 +122,117 @@ function legerebeaute_service_details_meta_box_callback($post)
    wp_nonce_field('legerebeaute_save_service_meta', 'legerebeaute_service_meta_nonce');
    $main_title = get_post_meta($post->ID, '_legerebeaute_main_title', true);
    $short_description = get_post_meta($post->ID, '_legerebeaute_short_description', true);
-   $gallery_ids = maybe_unserialize(get_post_meta($post->ID, '_legerebeaute_gallery', true)); // Старое поле
-   if (!is_array($gallery_ids))
-      $gallery_ids = [];
 
    echo '<style>#legerebeaute-gallery-container{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}.gallery-image-preview{position:relative;flex-shrink:0;width:150px;height:150px;border:1px solid #ddd;border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center}.gallery-image-preview img{max-width:100%;max-height:100%;object-fit:cover}.gallery-image-preview .remove-image{position:absolute;top:2px;right:2px;width:20px;height:20px;padding:0;background-color:#d63638;color:white;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:.8}</style>';
    echo '<div><label for="legerebeaute_main_title">Заголовок 2 (если отличается от названия):</label><input type="text" id="legerebeaute_main_title" name="legerebeaute_main_title" value="' . esc_attr($main_title) . '" style="width:100%"></div>';
    echo '<div><label for="legerebeaute_short_description">Краткое описание:</label><textarea id="legerebeaute_short_description" name="legerebeaute_short_description" rows="4" style="width:100%">' . esc_textarea($short_description) . '</textarea></div>';
-   // --- ВАЖНО: Поле галереи пока оставлено в старом формате ---
-   echo '<div><h4>Галерея (старый формат):</h4><div id="legerebeaute-gallery-container">';
-   foreach ($gallery_ids as $id) {
-      $src = wp_get_attachment_image_src($id, 'thumbnail');
-      if ($src)
-         echo '<div class="gallery-image-preview" data-id="' . $id . '"><img src="' . esc_url($src[0]) . '"><button type="button" class="button remove-image">X</button><input type="hidden" name="legerebeaute_gallery[]" value="' . $id . '"></div>';
-   }
-   echo '</div><button type="button" id="legerebeaute-add-gallery-images" class="button">Добавить изображения</button><p><small>Нажмите кнопку, чтобы выбрать изображения из медиатеки. (Пока не использует хелпер)</small></p></div>';
 }
 
 // === Вывод полей в блоке "Преимущества" ===
 function legerebeaute_service_benefits_meta_box_callback($post)
 {
+   $second_title = get_post_meta($post->ID, '_legerebeaute_second_title', true);
    $benefits = maybe_unserialize(get_post_meta($post->ID, '_legerebeaute_benefits', true)); // Старое поле
    if (!is_array($benefits)) {
       $benefits = [];
    }
+   ?>
+   <div class="inside">
+      <label for="legerebeaute_second_title">Заголовок:</label>
+      <input type="text" id="legerebeaute_second_title" name="legerebeaute_second_title"
+         value="<?= esc_attr($second_title); ?>" style="width:100%">
+   </div>
+   <table id="benefits-table" style="margin-bottom:10px;width:100%;border-collapse:collapse">
+      <thead>
+         <tr>
+            <th style="border:1px solid #ccc;padding:5px">Изображение</th>
+            <th style="border:1px solid #ccc;padding:5px">Заголовок</th>
+            <th style="border:1px solid #ccc;padding:5px">Текст</th>
+            <th style="border:1px solid #ccc;padding:5px">
+            </th>
+         </tr>
+      </thead>
+      <tbody>
+         <?php foreach ($benefits as $i => $b) {
+            // Обработка старого формата ('image_id') и нового ('image' => ['id'])
+            $image_data = isset($b['image']) && is_array($b['image']) ? $b['image'] : array(
+               'id' => isset($b['image_id']) ?
+                  (int) $b['image_id'] : 0,
+               'url' => ''
+            );
+            $current_image_id = $image_data['id'];
+            ?>
+            <tr>
+               <td style="border:1px solid #ccc;padding:5px;width:150px">
+                  <?php
+                  echo Legerebeaute_Image_Helper::render_image_field("legerebeaute_benefits[{$i}][image]", array(
+                     'value_id' => $current_image_id,
+                     'value_url' => $image_data['url'], // Если нужно хранить URL
+                     'preview_size' => 'thumbnail',
+                     'wrapper_class' => 'legerebeaute-image-field-wrapper legerebeaute-benefit-image-field',
+                  )); ?>
+               </td>
+               <td style="border:1px solid #ccc;padding:5px">
+                  <input type="text" name="legerebeaute_benefits[<?= $i ?>][title]" value="<?= $b['title'] ?? ''; ?>"
+                     style="width:100%">
+               </td>
+               <td style="border:1px solid #ccc;padding:5px">
+                  <input type="text" name="legerebeaute_benefits[<?= $i ?>][text]" value="<?= esc_attr($b['text'] ?? ''); ?>"
+                     style="width:100%">
+               </td>
+               <td style="border:1px solid #ccc;padding:5px">
+                  <button type="button" class="button button-small" onclick="removeBenefitRow(this)">Удалить</button>
+               </td>
+            </tr>
+         <?php } ?>
+         <tr class="benefit-row-template" style="display: none;">
+            <td style="border:1px solid #ccc;padding:5px;width:150px">
+               <?php
+               echo Legerebeaute_Image_Helper::render_image_field("legerebeaute_benefits[NEW_INDEX][image]", array(
+                  'value_id' => 0,
+                  'value_url' => '',
+                  'preview_size' => 'thumbnail',
+                  'wrapper_class' => 'legerebeaute-image-field-wrapper legerebeaute-benefit-image-field',
+               ));
+               ?>
+            </td>
+            <td style="border:1px solid #ccc;padding:5px">
+               <input type="text" name="legerebeaute_benefits[NEW_INDEX][title]" style="width:100%">
+            </td>
+            <td style="border:1px solid #ccc;padding:5px">
+               <input type="text" name="legerebeaute_benefits[NEW_INDEX][text]" style="width:100%">
+            </td>
+            <td style="border:1px solid #ccc;padding:5px">
+               <button type="button" class="button button-small" onclick="removeBenefitRow(this)">Удалить</button>
+            </td>
+         </tr>
+      </tbody>
+   </table>
+   <button type="button" class="button button-small" onclick="addBenefitRow()">Добавить преимущество</button>
 
-   echo '<table id="benefits-table" style="margin-bottom:10px;width:100%;border-collapse:collapse"><thead><tr><th style="border:1px solid #ccc;padding:5px">Изображение</th><th style="border:1px solid #ccc;padding:5px">Заголовок</th><th style="border:1px solid #ccc;padding:5px">Текст</th><th style="border:1px solid #ccc;padding:5px"></th></tr></thead><tbody>';
+   <script type="text/javascript">
+      let benefitIndex = <?php echo wp_json_encode(count($benefits)); ?>;
 
-   foreach ($benefits as $i => $b) {
-      // Обработка старого формата ('image_id') и нового ('image' => ['id'])
-      $image_data = isset($b['image']) && is_array($b['image']) ? $b['image'] : array('id' => isset($b['image_id']) ? (int) $b['image_id'] : 0, 'url' => '');
-      $current_image_id = $image_data['id'];
+      function addBenefitRow() {
+         const tbody = document.querySelector("#benefits-table tbody");
+         const templateRow = document.querySelector(".benefit-row-template").cloneNode(true);
+         templateRow.style.display = ""; // Показываем клон
+         templateRow.innerHTML = templateRow.innerHTML.replace(/NEW_INDEX/g, benefitIndex); // Заменяем плейсхолдер
+         templateRow.setAttribute("data-index", benefitIndex); // Добавляем атрибут для отслеживания
+         tbody.appendChild(templateRow);
 
-      echo '<tr>';
-      echo '<td style="border:1px solid #ccc;padding:5px;width:150px">';
-      echo Legerebeaute_Image_Helper::render_image_field("legerebeaute_benefits[{$i}][image]", array(
-         'value_id' => $current_image_id,
-         'value_url' => $image_data['url'], // Если нужно хранить URL
-         'preview_size' => 'thumbnail',
-         'wrapper_class' => 'legerebeaute-image-field-wrapper legerebeaute-benefit-image-field',
-      ));
-      echo '</td>';
-      echo '<td style="border:1px solid #ccc;padding:5px"><input type="text" name="legerebeaute_benefits[' . $i . '][title]" value="' . esc_attr($b['title'] ?? '') . '" style="width:100%"></td>';
-      echo '<td style="border:1px solid #ccc;padding:5px"><input type="text" name="legerebeaute_benefits[' . $i . '][text]" value="' . esc_attr($b['text'] ?? '') . '" style="width:100%"></td>';
-      echo '<td style="border:1px solid #ccc;padding:5px"><button type="button" class="button button-small" onclick="removeBenefitRow(this)">Удалить</button></td>';
-      echo '</tr>';
-   }
-
-   echo '</tbody></table>';
-   echo '<button type="button" class="button button-small" onclick="addBenefitRow()">Добавить преимущество</button>';
-
-   echo '<tr class="benefit-row-template" style="display: none;">';
-   echo '<td style="border:1px solid #ccc;padding:5px;width:150px">';
-   echo Legerebeaute_Image_Helper::render_image_field("legerebeaute_benefits[NEW_INDEX][image]", array(
-      'value_id' => 0,
-      'value_url' => '',
-      'preview_size' => 'thumbnail',
-      'wrapper_class' => 'legerebeaute-image-field-wrapper legerebeaute-benefit-image-field',
-   ));
-   echo '</td>';
-   echo '<td style="border:1px solid #ccc;padding:5px"><input type="text" name="legerebeaute_benefits[NEW_INDEX][title]" style="width:100%"></td>';
-   echo '<td style="border:1px solid #ccc;padding:5px"><input type="text" name="legerebeaute_benefits[NEW_INDEX][text]" style="width:100%"></td>';
-   echo '<td style="border:1px solid #ccc;padding:5px"><button type="button" class="button button-small" onclick="removeBenefitRow(this)">Удалить</button></td>';
-   echo '</tr>';
-
-   echo '<script type="text/javascript">
-    let benefitIndex = ' . count($benefits) . ';
-
-    function addBenefitRow() {
-        const tbody = document.querySelector("#benefits-table tbody");
-        const templateRow = document.querySelector(".benefit-row-template").cloneNode(true);
-        templateRow.style.display = ""; // Показываем клон
-        templateRow.innerHTML = templateRow.innerHTML.replace(/NEW_INDEX/g, benefitIndex); // Заменяем плейсхолдер
-        templateRow.setAttribute("data-index", benefitIndex); // Добавляем атрибут для отслеживания
-        tbody.appendChild(templateRow);
-
-        // Инициализируем хелпер для нового поля изображения (предполагаем, что функция будет в отдельном JS файле)
-        if (typeof initializeNewBenefitImageField === "function") {
+         // Инициализируем хелпер для нового поля изображения (предполагаем, что функция будет в отдельном JS файле)
+         if (typeof initializeNewBenefitImageField === "function") {
             initializeNewBenefitImageField(benefitIndex);
-        }
+         }
 
-        benefitIndex++;
-    }
-
-    function removeBenefitRow(button) {
-        button.closest("tr").remove();
-    }
-    </script>';
+         benefitIndex++;
+      }
+      function removeBenefitRow(button) {
+         button.closest("tr").remove();
+      }
+   </script>
+   <?php
 }
 
 // === Вывод полей в блоке "Цены" ===
@@ -297,6 +326,20 @@ function legerebeaute_service_effects_img_meta_box_callback($post)
    echo '</tbody></table><button type="button" class="button button-small" onclick="addEffectImgRow()">Добавить эффект</button><script>let effectImgIndex=' . count($effects) . ';function addEffectImgRow(){const t=document.querySelector("#effects-img-table tbody");const r=document.createElement("tr");r.innerHTML=\'<td style="border:1px solid #ccc;padding:5px"><input type="text" name="legerebeaute_effects_img[\'+effectImgIndex+\'][text]" style="width:100%"></td><td style="border:1px solid #ccc;padding:5px"><button type="button" class="button button-small" onclick="removeEffectImgRow(this)">Удалить</button></td>\';t.appendChild(r);effectImgIndex++}function removeEffectImgRow(t){t.closest("tr").remove()}</script>';
 }
 
+// === Вывод полей в блоке "Эффекты на фото 2" ===
+function legerebeaute_service_effects_img_2_meta_box_callback($post)
+{
+   $effects = maybe_unserialize(get_post_meta($post->ID, '_legerebeaute_effects_img_2', true));
+   if (!is_array($effects))
+      $effects = [];
+
+   echo '<table id="effects-img-2-table" style="margin-bottom:10px;width:100%;border-collapse:collapse"><thead><tr><th style="border:1px solid #ccc;padding:5px">Эффект</th><th style="border:1px solid #ccc;padding:5px"></th></tr></thead><tbody>';
+   foreach ($effects as $i => $e) {
+      echo '<tr><td style="border:1px solid #ccc;padding:5px"><input type="text" name="legerebeaute_effects_img_2[' . $i . '][text]" value="' . esc_attr($e['text'] ?? '') . '" style="width:100%"></td><td style="border:1px solid #ccc;padding:5px"><button type="button" class="button button-small" onclick="removeEffectImg2Row(this)">Удалить</button></td></tr>';
+   }
+   echo '</tbody></table><button type="button" class="button button-small" onclick="addEffectImg2Row()">Добавить эффект</button><script>let effectImg2Index=' . count($effects) . ';function addEffectImg2Row(){const t=document.querySelector("#effects-img-2-table tbody");const r=document.createElement("tr");r.innerHTML=\'<td style="border:1px solid #ccc;padding:5px"><input type="text" name="legerebeaute_effects_img_2[\'+effectImg2Index+\'][text]" style="width:100%"></td><td style="border:1px solid #ccc;padding:5px"><button type="button" class="button button-small" onclick="removeEffectImg2Row(this)">Удалить</button></td>\';t.appendChild(r);effectImg2Index++}function removeEffectImg2Row(t){t.closest("tr").remove()}</script>';
+}
+
 // === Вывод полей в блоке "Характеристики" ===
 function legerebeaute_service_features_meta_box_callback($post)
 {
@@ -316,14 +359,52 @@ function legerebeaute_service_image_2_meta_box_callback($post)
    $image_id = isset($image_data['id']) ? (int) $image_data['id'] : 0;
    $image_url = isset($image_data['url']) ? esc_url($image_data['url']) : '';
 
-   echo '<div><label>Изображение 2:</label>';
+   echo '<div>';
    echo Legerebeaute_Image_Helper::render_image_field('_legerebeaute_image_2', array(
       'value_id' => $image_id,
       'value_url' => $image_url,
-      'label' => 'Изображение 2 (через универсальный хелпер)',
-      'description' => 'Выберите изображение 2 для услуги.'
+      'label' => 'Выберите изображение 2 для услуги.'
    ));
    echo '</div>';
+}
+
+// === Вывод полей в блоке "Идеально сочетается" ===
+function legerebeaute_service_perfect_matches_meta_box_callback($post)
+{
+   // Получаем сохранённые ID связанных услуг
+   $perfect_match_ids = get_post_meta($post->ID, '_legerebeaute_perfect_matches', true);
+   if (!is_array($perfect_match_ids)) {
+      $perfect_match_ids = [];
+   }
+
+   // Получаем список всех услуг для списка чекбоксов
+   $all_services = get_posts(array(
+      'post_type' => 'services',
+      'numberposts' => -1,
+      'post_status' => 'publish',
+      'post__not_in' => array($post->ID),
+      'orderby' => 'title',
+      'order' => 'ASC',
+   ));
+   ?>
+   <div class="inside">
+      <p>Выберите услуги, которые идеально сочетаются с этой:</p>
+      <div id="legerebeaute-perfect-matches-checkboxes"
+         style="display: flex; flex-wrap: wrap; gap: 10px; max-height: 200px; overflow-y: auto; padding: 10px;">
+         <?php foreach ($all_services as $service) {
+            $checked = checked(in_array($service->ID, $perfect_match_ids), true, false);
+            $checkbox_id = 'legerebeaute_perfect_match_' . $service->ID; // Уникальный ID для label
+            ?>
+            <p style="border: 1px solid #ddd; padding: 5px;">
+               <input type="checkbox" id="<?= esc_attr($checkbox_id); ?>" name="legerebeaute_perfect_matches[]"
+                  value="<?= esc_attr($service->ID); ?>" <?= $checked; ?>>
+               <label for="<?= esc_attr($checkbox_id); ?>"><?= esc_html($service->post_title); ?></label>
+            </p>
+         <?php } ?>
+      </div>
+      <p class="description">Отметьте галочками нужные услуги.</p>
+   </div>
+   <?php
 }
 
 // === Сохранение метаполей ===
@@ -338,23 +419,12 @@ function legerebeaute_save_service_meta($post_id)
       return;
 
    // Простые текстовые поля
-   $text_fields = ['main_title', 'short_description', 'duration'];
+   $text_fields = ['main_title', 'second_title', 'short_description', 'duration'];
    foreach ($text_fields as $field) {
       if (isset($_POST["legerebeaute_{$field}"])) {
          update_post_meta($post_id, "_legerebeaute_{$field}", sanitize_text_field($_POST["legerebeaute_{$field}"]));
       }
    }
-
-   // Галерея (старое поле, пока не трогаем)
-   $gallery_ids = [];
-   if (isset($_POST['legerebeaute_gallery']) && is_array($_POST['legerebeaute_gallery'])) {
-      foreach ($_POST['legerebeaute_gallery'] as $id) {
-         if (is_numeric($id) && wp_attachment_is_image($id)) {
-            $gallery_ids[] = (int) $id;
-         }
-      }
-   }
-   update_post_meta($post_id, '_legerebeaute_gallery', serialize($gallery_ids)); // Остается serialized
 
    // Чекбоксы
    $checkboxes = ['booking_enabled', 'show_on_home'];
@@ -363,23 +433,18 @@ function legerebeaute_save_service_meta($post_id)
       update_post_meta($post_id, "_legerebeaute_{$field}", $value);
    }
 
-   // Repeater: Преимущества (обновлено для нового формата)
-   $benefits = array();
+   // Сохранение Repeater: Преимущества
+   $benefits = [];
    if (isset($_POST['legerebeaute_benefits']) && is_array($_POST['legerebeaute_benefits'])) {
+
       foreach ($_POST['legerebeaute_benefits'] as $data) {
-         if (isset($data['title'], $data['text'])) {
-            // --- ПРАВИЛЬНО: Обрабатываем $data['image'] напрямую ---
+         if (isset($data['title'], $data['text']) && (!empty(trim($data['title'])) || !empty(trim($data['text'])))) {
             $image_input = $data['image'] ?? array();
             $processed_image = array('id' => 0, 'url' => '');
-
-            // Проверяем, является ли $image_input массивом (ожидаемый формат)
             if (is_array($image_input)) {
                $id = absint($image_input['id'] ?? 0);
-
-               // Проверяем ID и тип вложения (копируем логику из is_attachment_of_allowed_types)
                if ($id && get_post_type($id) === 'attachment') {
                   $mime_type = get_post_mime_type($id);
-                  // Проверяем, является ли это изображением
                   if ($mime_type && strpos($mime_type, 'image/') === 0) {
                      $processed_image['id'] = $id;
                      $url = wp_get_attachment_url($id);
@@ -387,8 +452,6 @@ function legerebeaute_save_service_meta($post_id)
                   }
                }
             }
-            // ---
-
             $benefits[] = array(
                'title' => sanitize_text_field($data['title']),
                'text' => sanitize_text_field($data['text']),
@@ -397,7 +460,7 @@ function legerebeaute_save_service_meta($post_id)
          }
       }
    }
-   update_post_meta($post_id, '_legerebeaute_benefits', $benefits); // Теперь НЕ serialize, а обычный массив
+   update_post_meta($post_id, '_legerebeaute_benefits', $benefits);
 
    // Сохранение repeater из "Цены"
    $price_options = [];
@@ -430,16 +493,44 @@ function legerebeaute_save_service_meta($post_id)
    if (isset($_POST['legerebeaute_effects_img']) && is_array($_POST['legerebeaute_effects_img'])) {
       foreach ($_POST['legerebeaute_effects_img'] as $data) {
          if (isset($data['text'])) {
-            $effects_img[] = ['text' => sanitize_text_field($data['text'])];
+            $effects_img[] = ['text' => wp_kses($data['text'], wp_kses_allowed_html('post'))];
          }
       }
    }
    update_post_meta($post_id, '_legerebeaute_effects_img', serialize($effects_img));
 
+   // Repeater: Эффекты на фото 2
+   $effects_img_2 = [];
+   if (isset($_POST['legerebeaute_effects_img_2']) && is_array($_POST['legerebeaute_effects_img_2'])) {
+      foreach ($_POST['legerebeaute_effects_img_2'] as $data) {
+         if (isset($data['text'])) {
+            $effects_img_2[] = ['text' => wp_kses($data['text'], wp_kses_allowed_html('post'))];
+         }
+      }
+   }
+   update_post_meta($post_id, '_legerebeaute_effects_img_2', serialize($effects_img_2));
+
    // Изображение 2
    $image_2_data = Legerebeaute_Image_Helper::process_image_field_from_post('_legerebeaute_image_2');
-   update_post_meta($post_id, '_legerebeaute_image_2', $image_2_data); // Теперь НЕ serialize, а обычный массив
+   update_post_meta($post_id, '_legerebeaute_image_2', $image_2_data);
+
+   // Сохранение "Идеально сочетается"
+   $perfect_match_ids = array();
+   if (isset($_POST['legerebeaute_perfect_matches']) && is_array($_POST['legerebeaute_perfect_matches'])) {
+      foreach ($_POST['legerebeaute_perfect_matches'] as $match_id) {
+         $id = intval($match_id);
+         // Проверяем, что ID - это положительное число и соответствует записи типа 'services'
+         if ($id > 0 && get_post_type($id) === 'services') {
+            $perfect_match_ids[] = $id;
+         }
+      }
+   }
+   // Убираем дубликаты, на всякий случай
+   $perfect_match_ids = array_unique($perfect_match_ids);
+   // Сохраняем массив ID как есть (WordPress автоматически сериализует при необходимости)
+   update_post_meta($post_id, '_legerebeaute_perfect_matches', $perfect_match_ids);
 }
+
 add_action('save_post_services', 'legerebeaute_save_service_meta');
 
 // === Хелпер для получения данных в шаблонах ===
@@ -451,7 +542,16 @@ if (!function_exists('legerebeaute_get_service_meta')) {
       $value = get_post_meta($post_id, '_legerebeaute_' . $key, true);
 
       // Обновленный список ключей, которые нужно десериализовать 
-      $serialized_keys = ['benefits', 'price_options', 'image_2', 'booking_time_slots', 'gallery', 'effects_txt', 'effects_img'];
+      $serialized_keys = [
+         'benefits',
+         'price_options',
+         'image_2',
+         'booking_time_slots',
+         'gallery',
+         'effects_txt',
+         'effects_img',
+         'effects_img_2'
+      ];
       // Ключи, которые НЕ нужно десериализовать (новые поля, хранящиеся как массивы)
       // $array_keys = ['benefits', 'price_options', 'image_2'];
 

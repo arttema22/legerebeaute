@@ -10,10 +10,6 @@ $args_terms = array(
 $categories = get_terms($args_terms);
 
 if ($categories && !is_wp_error($categories)):
-
-   wp_enqueue_style('lb-accordeon', get_template_directory_uri() . '/assets/css/components/accordeon.css', [], $version);
-   wp_enqueue_script('lb-accordeon', get_template_directory_uri() . '/assets/js/accordeon.js', [], $version, true);
-
    ?>
 
    <section class="lb-accordeon services-accordeon" data-close-others="false">
